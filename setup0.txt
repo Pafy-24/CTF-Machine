@@ -1,0 +1,135 @@
+Chall 0:
+(Setup masina)
+
+Instalare Linux Mint. + user administrator
++instalare ssh
+	$sudo apt update	
+	$sudo apt upgrade
+	$sudo apt install ssh	
+	$sudo apt install openssh-server
+	$sudo systemctl enable ssh	
+	$sudo systemctl enable sshd
+	#restart
+
+	#Primul user
+	$sudo useradd -m -s /bin/bash student
+	$echo "student:student" | sudo chpasswd
+
+	$sudo nano /etc/ssh/sshd_config
+	# adaugam:
+	```AllowUsers student```
+	$sudo systemctl restart sshd
+
+
+
+	$sudo chmod -x /etc/update-motd.d/*
+
+    	$sudo rm /etc/update-motd.d/*
+Varianta1:-----------
+	$sudo rm /etc/motd
+	$sudo nano /home/student/.profile
+
+
+# Scriem custom welcome pentru student
+```
+echo "#######################################################"
+echo "#                                                     #"
+echo "#  PinguWelcome, my student, to my vulnerable machine!#"
+echo "#  Get ready for a multitude of minty challenges over #"
+echo "#  my PenguLinux. The control was lost and now you    #"
+echo "#  have to regain it!                                 #"
+echo "#                                                     #"
+echo "#  Your adventure awaits. Good luck!                  #"
+echo "#                                                     #"
+echo "#  Chall0: Find the password for the first level.     #"
+echo "#  It is well hidden across your own files.           #"
+echo "#                                                     #"
+echo "#######################################################"
+echo "			Ping! Ping! Ping!"
+echo "          .--."
+echo "         |o_o |"
+echo "         |:_/ |"
+echo "        //   \ \\"
+echo "       (|     | )"
+echo "      /'\_   _/`\\"
+echo "      \___)=(___/"
+echo ""
+```
+
+Varianta2:-----------
+	$sudo nano /etc/motd
+	#Scriem:
+```
+#######################################################
+#                                                     #
+#  PinguWelcome to my vulnerable machine!             #
+#  Get ready for a multitude of minty challenges over #
+#  my PenguLinux. The control was lost and now you    #
+#  have to regain it!                                 #
+#                                                     #
+#  Your adventure awaits. Good luck!                  #
+#                                                     #
+#######################################################
+			Ping! Ping! Ping!"
+          .--."
+         |o_o |"
+         |:_/ |"
+        //   \ \\"
+       (|     | )"
+      /'\_   _/`\\"
+      \___)=(___/"
+
+
+```
+
+----------------
+	
+
+	#restrictii:
+
+	$sudo chsh -s /bin/bash student
+	$sudo rm /home/student/.bash_profile
+	$sudo chmod 700 /home/*
+	$sudo chmod 755 /home/student
+	$sudo setfacl -m u:student:--x /etc
+	$sudo setfacl -m u:student:--x /var
+	$sudo setfacl -m u:student:--x /bin
+	$sudo setfacl -m u:student:--x /sbin
+	$sudo setfacl -m u:student:--x /usr
+
+
+
+	#update .bashrc
+	$sudo nano /home/student/.bashrc
+	```#add the following
+	cd() {
+    		if [ "$1" != "" ] && [ "$1" != "$HOME" ] && [[ "$1" != $HOME/* ]]; then
+        		echo "You cannot change to that directory."
+    		else
+        		builtin cd "$@"
+    		fi
+	}	
+	export PATH=$PATH:/bin:/usr/bin
+	PS1='restricted-shell:\w\$ '
+	```
+	
+#Challul efectiv:
+restricted-shell:~$ mkdir Documents
+restricted-shell:~$ mkdir Downloads
+restricted-shell:~$ mkdir Desktop
+restricted-shell:~$ mkdir Music
+restricted-shell:~$ mkdir Videos
+restricted-shell:~$ mkdir Pictures
+restricted-shell:~$ mkdir Public
+restricted-shell:~$ mkdir Templates
+	$sudo mkdir -p /home/student/Documents/.hidden1/.hidden2/.hidden3
+
+#Create flag:	
+	$echo "CTF{W3lc0m3_" | sudo tee /home/student/Documents/.hidden1/.hidden2/.hidden3/.flag > /dev/null
+
+#permisiuni
+	$sudo chown -R student:student /home/student/Documents/.hidden1
+    	$sudo chmod 700 /home/student/Documents/.hidden1
+	$sudo chmod 700 /home/student/Documents/.hidden1/.hidden2
+	$sudo chmod 700 /home/student/Documents/.hidden1/.hidden2/.hidden3
+	$sudo chmod 600 /home/student/Documents/.hidden1/.hidden2/.hidden3/.flag

@@ -1,0 +1,152 @@
+Chall 1:
+	#Primul user
+	$sudo useradd -m -s /bin/bash chall1
+	$echo "chall1:CTF{W3lc0m3_" | sudo chpasswd
+
+	$sudo nano /etc/ssh/sshd_config
+	# adaugam:
+	```AllowUsers chall1```
+	$sudo systemctl restart sshd
+
+
+
+	$sudo rm /etc/motd
+	$sudo nano /home/chall1/.profile
+
+
+# Scriem custom welcome pentru challenger
+```
+echo "#########################################################"
+echo "#                                                       #"
+echo "#  WoW! You made it into the machine!   ....Nice!       #"
+echo "#  But don't think it will be that easy from now on!    #"
+echo "#  My PenguLinux is well protected with multiple layers #"
+echo "#  of restrictive permissions.                          #"
+echo "#         Good luck trying to break them!               #"
+echo "#                                                       #"
+echo "# Chall1: The secrets are in the leet lines, like 1337  #"
+echo "#  Also, you might want to search for leeter files...   #"
+echo "#                                                       #"
+echo "#########################################################"
+echo "			Ping! Ping! Ping!"
+echo "          .--."
+echo "         |o_o |"
+echo "         |:_/ |"
+echo "        //   \ \\"
+echo "       (|     | )"
+echo "      /'\_   _/\`\\"
+echo "      \___)=(___/"
+echo ""
+```
+	$sudo chown chall1:chall1 /home/chall1/.profile
+	$sudo chmod 644 /home/chall1/.profile
+
+	#create jail
+
+	$sudo mkdir -p /jail/home/chall1
+	$sudo mkdir -p /jail/{dev,proc,etc,bin,lib,lib64,usr}
+	$sudo cp /bin/bash /jail/bin/
+	$ldd /bin/bash
+
+	#Jail functioning
+	$sudo mkdir -p /jail/lib/x86_64-linux-gnu
+	$sudo mkdir -p /jail/lib64
+	$sudo cp /lib/x86_64-linux-gnu/libtinfo.so.6 /jail/lib/x86_64-linux-gnu/
+	$sudo cp /lib/x86_64-linux-gnu/libc.so.6 /jail/lib/x86_64-linux-gnu/
+	$sudo cp /lib64/ld-linux-x86-64.so.2 /jail/lib64/
+
+
+	$sudo usermod -d /home/chall1 chall1
+	$sudo chown root:root /jail
+	$sudo chown chall1:chall1 /jail/home/chall1
+	
+	$sudo nano /etc/ssh/sshd_config
+	#chroot - > JAIL
+	```
+	Match User chall1
+    		ChrootDirectory /jail
+    		ForceCommand /bin/bash -l
+    		AllowTcpForwarding no
+    		X11Forwarding no
+	```
+	
+	$sudo systemctl restart sshd
+
+	#test:
+	$chroot /jail /bin/bash
+	#plus comenzi
+	$sudo cp /bin/* /jail/bin/
+	$sudo cp -r /lib/ /jail/lib/
+	$sudo cp -r /lib/* /jail/lib/
+	$sudo cp /home/chall1/.profile /jail/home/chall1/.profile
+#Chall setup
+	$sudo mkdir /jail/home/chall1/Personal
+	
+	$sudo nano generateFiles.sh
+	#Scriptul fatal memorie:
+```
+#!/bin/bash
+
+CHARS='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_+-}{\='
+MASTER_COUNT=7
+MASTER_LINES=4000
+MIN_LEN=10
+MAX_LEN=25
+
+generate_random_string() {
+    local len=$(( RANDOM % (MAX_LEN - MIN_LEN + 1) + MIN_LEN ))
+    tr -dc "$CHARS" < /dev/urandom | head -c "$len"
+}
+
+mkdir -p masters files
+
+echo "[+] Generating $MASTER_COUNT master files..."
+
+for i in $(seq 0 $((MASTER_COUNT - 1))); do
+    filename="masters/master_${i}.txt"
+    > "$filename"
+    for _ in $(seq 1 $MASTER_LINES); do
+        generate_random_string >> "$filename"
+        echo "" >> "$filename"
+    done
+    echo "Created $filename"
+done
+
+echo "[+] Generating derived files..."
+
+for prefix in $(seq 0 9); do
+    base=$(( prefix * 1000 ))
+    for j in $(seq 0 299); do
+        number=$(( base + j ))
+        outfile="files/${prefix}_$(printf "%04d" $number).txt"
+
+        master_index=$(( number % MASTER_COUNT ))
+        masterfile="masters/master_${master_index}.txt"
+
+        t=$(( RANDOM % 3 ))  # 0=copy,1=inverse linie,2=inverse linii
+
+        case $t in
+            0)
+                cp "$masterfile" "$outfile"
+                ;;
+            1)
+                awk '{ for(i=length;i>0;i--) printf "%s", substr($0,i,1); print "" }' "$masterfile" > "$outfile"
+                ;;
+            2)
+                tac "$masterfile" > "$outfile"
+                ;;
+        esac
+
+        if (( number % 1000 == 0 )); then
+            echo "Generated $outfile (type $t from master $master_index)"
+        fi
+    done
+done
+
+echo "[✓] Done."
+```
+	$sudo chmod +x generateFiles.sh
+	$sudo ./generateFiles.sh
+	$sudo rm generateFiles.sh
+
+
