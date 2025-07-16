@@ -1,0 +1,153 @@
+# Chall 2 Setup - Jail + Cron Whisper
+
+
+#Cron active
+sudo systemctl enable cron
+sudo systemctl start cron
+sudo systemctl status cron
+
+
+
+# 1. Create user chall2 with known password
+sudo useradd -m -s /bin/bash chall2
+sudo echo "chall2:CTF{W3lc0m3__1nT0_My_M4kh1N@}" | sudo chpasswd
+
+# 2. SSH access restriction
+sudo nano /etc/ssh/sshd_config
+# Adaugam:
+```AllowUsers chall2```
+
+# 3. Restart SSH
+sudo systemctl restart sshd
+
+# 4. Create chroot jail for chall2
+sudo mkdir -p /jail2/{home/chall2,dev,proc,etc,bin,lib,lib64,usr}
+sudo cp /bin/bash /jail2/bin/
+sudo cp -r /bin/* /jail2/bin/
+
+# 5. Copy required libs
+sudo cp -r /lib/* /jail2/lib/
+sudo cp -r /lib64/* /jail2/lib64/
+
+# 6. User jail permissions
+sudo usermod -d /home/chall2 chall2
+sudo chown root:root /jail2
+sudo chown chall2:chall2 /jail2/home/chall2
+
+# 7. .profile cu mesaj personalizat
+
+	$sudo nano /home/chall2/.profile
+
+```
+echo "#########################################################"
+echo "#                                                       #"
+echo "#  I can't believe this!! >:(		              #"
+echo "#  I thought the key was well hidden and separated.     #"
+echo "#  Well doesn't matter because you need to be a perfect #"
+echo "#  student in Operating systems to get the real access  #"
+echo "#  to my server.				              #"
+echo "#                                                       #"
+echo "# Chall2: Sometimes, people say important things, but   #"
+echo "#  there's no one to hear them...			      #"
+echo "#                                                       #"
+echo "#########################################################"
+echo "			Ping! Ping! Ping!"
+echo "          .--."
+echo "         |o_o |"
+echo "         |:_/ |"
+echo "        //   \ \\"
+echo "       (|     | )"
+echo "      /'\_   _/\`\\"
+echo "      \___)=(___/"
+echo ""
+```
+
+
+sudo cp /home/chall2/.profile /jail2/home/chall2/.profile
+sudo chown chall2:chall2 /jail2/home/chall2/.profile
+sudo chmod 644 /jail2/home/chall2/.profile
+
+# 8. Configure SSH Jail
+sudo nano /etc/ssh/sshd_config
+# Adaugam:
+```
+Match User chall2
+     ChrootDirectory /jail2
+     ForceCommand /bin/bash -l
+     AllowTcpForwarding no
+     X11Forwarding no
+```
+sudo systemctl restart sshd
+
+
+# 10. Cream un folder accesibil in jail pt cronjob
+sudo mkdir -p /jail2/tmp/whispers
+sudo chmod 777 /jail2/tmp/whispers
+
+# 11. Cream CronJobs
+sudo tee /usr/local/bin/whisper1.sh > /dev/null << 'EOF'
+#!/bin/bash
+while true; do
+  echo "[Whisper1] FLAG{Y0u_H34rd_Th3_Wh1SP3r5!}"
+  sleep 60
+done
+EOF
+
+sudo tee /usr/local/bin/whisper2.sh > /dev/null << 'EOF'
+#!/bin/bash
+while true; do
+  echo "[Whisper2] Nothing to see here... or is there? FLAG{Y0u_H34rd_Th3_Wh1SP3r5!}"
+  sleep 60
+done
+EOF
+
+sudo tee /usr/local/bin/whisper3.sh > /dev/null << 'EOF'
+#!/bin/bash
+while true; do
+  >&1 echo "[Whisper3] Psst... FLAG{Y0u_H34rd_Th3_Wh1SP3r5!}"
+  sleep 60
+done
+EOF
+
+sudo tee /usr/local/bin/whisper4.sh > /dev/null << 'EOF'
+#!/bin/bash
+while true; do
+  /bin/echo -n "[Whisper4] Did you catch it? FLAG{Y0u_H34rd_Th3_Wh1SP3r5!}"
+  sleep 60
+done
+EOF
+
+sudo tee /usr/local/bin/whisper5.sh > /dev/null << 'EOF'
+#!/bin/bash
+while true; do
+  echo -e "\e[1;32m[Whisper5] FLAG{Y0u_H34rd_Th3_Wh1SP3r5!}\e[0m"
+  sleep 60
+done
+EOF
+
+sudo chmod +x /usr/local/bin/whisper*.sh
+
+# 12. Pornim cronjobs-urile
+sudo nano /etc/systemd/system/whisperers.service
+```
+[Unit]
+Description=Start all whisperer scripts
+After=network.target
+
+[Service]
+Type=simple
+User=chall2
+ExecStart=/bin/bash -c '/usr/local/bin/whisper1.sh & /usr/local/bin/whisper2.sh & /usr/local/bin/whisper3.sh & /usr/local/bin/whisper4.sh & /usr/local/bin/whisper5.sh & wait'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+sudo mount --bind /proc /jail2/proc
+sudo systemctl daemon-reload
+sudo systemctl enable whisperers.service
+sudo systemctl start whisperers.service
+sudo systemctl status whisperers.service
+
+
+
