@@ -79,6 +79,7 @@ echo ""
 	$sudo cp -r /lib/ /jail/lib/
 	$sudo cp -r /lib/* /jail/lib/
 	$sudo cp /home/chall1/.profile /jail/home/chall1/.profile
+	$sudo usermod -d /jail/home/chall1 -m chall1
 #Chall setup
 	$sudo mkdir /jail/home/chall1/Personal
 	

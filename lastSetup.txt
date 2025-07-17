@@ -1,0 +1,31 @@
+#Goodbye message
+
+sudo nano /etc/ssh/sshd_config
+# Add:
+``` AllowUsers administrator ```
+sudo systemctl restart sshd
+
+sudo nano /home/administrator/.profile
+```
+echo "#########################################################"
+echo "#                                                       #"
+echo "#  I can't believe this!!  My wings are fluttering!     #"
+echo "#  How did you manage to do something like this?        #"
+echo "#                                                       #"
+echo "# What are we supposed to do now? We can't be both here!#"
+echo "#                                                       #"
+echo "#                                                       #"
+echo "#       		Move over! There's no space left!     #"
+echo "#                                                       #"
+echo "#########################################################"
+echo "			Pingx2! Pingx2! Pingx2!"
+echo ""
+echo "          .--. .--."
+echo "         |o_o || x_x|"
+echo "         |:_/ || \_:|"
+echo "        //   \\/   \\\\"
+echo "       (|     ||     |)"
+echo "      /'\_   _/\_   _/`\\"
+echo "      \___)=(___)=(___/"
+echo ""
+```

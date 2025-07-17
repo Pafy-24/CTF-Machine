@@ -1,0 +1,212 @@
+# Chall 3Setup - Jail + Web + John
+
+sudo useradd -m -s /bin/bash chall3
+sudo echo 'chall3:CTF{Y0u_H34rd_Th3_Wh1SP3r5!}' | sudo chpasswd
+
+
+sudo nano /etc/ssh/sshd_config
+# Add:
+``` AllowUsers chall3 ```
+sudo systemctl restart sshd
+
+#Jail Setup
+sudo mkdir -p /jail3/{home/chall3,dev,proc,etc,bin,lib,lib64,usr,var,tmp}
+sudo mkdir -p /jail3/usr/{bin,lib,local}
+sudo mkdir -p /jail3/var/{log,www}
+sudo mkdir -p /jail3/tmp
+
+# Copy Sistem functional
+sudo cp -r /bin/* /jail3/bin/
+sudo cp -r /usr/bin/* /jail3/usr/bin/
+
+# Copy required libraries
+sudo cp -r /lib/* /jail3/lib/
+sudo cp -r /lib64/* /jail3/lib64/
+sudo cp -r /usr/lib/python3* /jail3/usr/lib/
+
+#Flask Setup:
+# Install Flask system-wide first
+sudo apt update
+sudo apt install python3-pip python3-flask -y
+
+# Copy Flask and dependencies to jail
+sudo cp -r /usr/lib/python3/dist-packages/flask* /jail3/usr/lib/python3/dist-packages/
+sudo cp -r /usr/lib/python3/dist-packages/werkzeug* /jail3/usr/lib/python3/dist-packages/
+sudo cp -r /usr/lib/python3/dist-packages/jinja2* /jail3/usr/lib/python3/dist-packages/
+sudo cp -r /usr/lib/python3/dist-packages/click* /jail3/usr/lib/python3/dist-packages/
+sudo cp -r /usr/lib/python3/dist-packages/itsdangerous* /jail3/usr/lib/python3/dist-packages/
+sudo cp -r /usr/lib/python3/dist-packages/markupsafe* /jail3/usr/lib/python3/dist-packages/
+
+# Create Python3 dist-packages directory structure
+sudo mkdir -p /jail3/usr/lib/python3/dist-packages
+
+#create the web app -- Web App files creation
+
+#Flask Startup
+
+sudo nano /jail3/var/www/start_app.sh
+```
+#!/bin/bash
+cd /var/www
+export PYTHONPATH=/usr/lib/python3/dist-packages:$PYTHONPATH
+python3 app.py
+```
+
+sudo chmod +x /jail3/var/www/start_app.sh
+
+
+
+
+#Welcoming message
+sudo nano /home/chall3/.profile
+```
+echo "#########################################################"
+echo "#                                                       #"
+echo "#  Impressive! You found the whispers!                 #"
+echo "#  But now you face the final challenge...             #"
+echo "#  My web application is running on localhost:8080     #"
+echo "#  It's supposed to be secure, but who knows?          #"
+echo "#                                                       #"
+echo "# chall3: The web holds many secrets, and sometimes    #"
+echo "#  the system's most sensitive information is just     #"
+echo "#  a command away... Look for the shadows!             #"
+echo "#                                                       #"
+echo "#########################################################"
+echo "			Ping! Ping! Ping!"
+echo "          .--."
+echo "         |o_o |"
+echo "         |:_/ |"
+echo "        //   \ \\"
+echo "       (|     | )"
+echo "      /'\_   _/\`\\"
+echo "      \___)=(___/"
+echo ""
+```
+sudo cp /home/chall3/.profile /jail3/home/chall3/.profile
+sudo chown chall3:chall3 /jail3/home/chall3/.profile
+sudo chmod 644 /jail3/home/chall3/.profile
+
+
+
+
+
+#Blocare SHell
+
+sudo nano /jail3/bin/restricted_shell
+```
+#!/bin/bash
+
+# Run .profile
+if [ -f /home/chall3/.profile ]; then
+    source /home/chall3/.profile
+fi
+
+echo ""
+echo "=========================================="
+echo "🔒 RESTRICTED SHELL ENVIRONMENT 🔒"
+echo "=========================================="
+echo ""
+echo "This shell has been locked down for security."
+echo "You can only:"
+echo "  - View this message"
+echo "  - Type 'exit' to disconnect"
+echo "  - Use the web interface at: http://[machine-ip]:8080"
+echo ""
+echo "All other commands are disabled."
+echo "The real challenge is through the web interface!"
+echo ""
+echo "=========================================="
+echo ""
+
+# Simple command loop that only accepts exit
+while true; do
+    echo -n "restricted-shell:~$ "
+    read -r input
+    
+    case "$input" in
+        "exit"|"quit"|"logout")
+            echo "Goodbye!"
+            exit 0
+            ;;
+        "help")
+            echo "Available commands: exit, help"
+            echo "Web interface: http://[machine-ip]:8080"
+            ;;
+        "")
+            # Just show prompt again
+            ;;
+        *)
+            echo "Command not allowed in restricted shell."
+            echo "Use the web interface: http://[machine-ip]:8080"
+            ;;
+    esac
+done
+```
+sudo chmod +x /jail3/bin/restricted_shell
+
+
+
+
+#jail ssh config
+sudo nano /etc/ssh/sshd_config
+# Add:
+```
+Match User chall3
+     ChrootDirectory /jail3
+     ForceCommand /bin/restricted_shell
+     AllowTcpForwarding no
+     X11Forwarding no
+```
+
+sudo systemctl restart sshd
+
+
+
+#Perms setup for vulnerability
+sudo usermod -d /home/chall3 chall3
+sudo chown root:root /jail3
+sudo chown chall3:chall3 /jail3/home/chall3
+sudo chown -R chall3:chall3 /jail3/var/www
+
+# CRITICAL: Copy shadow file to jail -- Aici e buleala
+sudo cp /etc/shadow /jail3/etc/shadow
+sudo chown chall3:chall3 /jail3/etc/shadow
+sudo chmod 644 /jail3/etc/shadow
+
+
+
+sudo cp /etc/passwd /jail3/etc/passwd
+sudo cp /etc/shadow /jail3/etc/shadow
+
+
+
+#Persistenta Flask
+
+sudo nano /etc/systemd/system/flask-chall3.service
+```
+[Unit]
+Description=Flask Challenge 3 Web Application
+After=network.target
+
+[Service]
+Type=simple
+User=chall3
+RootDirectory=/jail3
+WorkingDirectory=/var/www
+ExecStart=/var/www/start_app.sh
+Restart=always
+Environment=PYTHONPATH=/usr/lib/python3/dist-packages
+
+[Install]
+WantedBy=multi-user.target
+```
+
+sudo systemctl daemon-reload
+sudo systemctl enable flask-chall3.service
+sudo systemctl start flask-chall3.service
+sudo systemctl status flask-chall3.service
+
+#Firewall
+sudo ufw allow 8080
+
+####!!!!!!!!!!!!! BRAVE BLOCHEAZA ORICE REQUEST CU cat shadow!!!!!!!!!!!!!!

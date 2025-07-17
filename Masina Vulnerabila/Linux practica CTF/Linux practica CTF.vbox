@@ -6,21 +6,19 @@
 ** Use VBoxManage or the VirtualBox Manager GUI to make changes.
 -->
 <VirtualBox xmlns="http://www.virtualbox.org/" version="1.19-windows">
-  <Machine uuid="{36bd5df5-90d0-4469-89f3-a22a2d36f4b3}" name="Linux practica CTF" OSType="Ubuntu_64" snapshotFolder="Snapshots" lastStateChange="2025-07-16T06:07:37Z">
+  <Machine uuid="{36bd5df5-90d0-4469-89f3-a22a2d36f4b3}" name="Linux practica CTF" OSType="Ubuntu_64" snapshotFolder="Snapshots" lastStateChange="2025-07-17T05:52:32Z">
     <MediaRegistry>
       <HardDisks>
         <HardDisk uuid="{994e3f4a-ba2d-43a7-aea6-3387767b5e86}" location="Linux practica CTF.vdi" format="VDI" type="Normal"/>
       </HardDisks>
       <DVDImages>
-        <Image uuid="{301e3e26-a083-4b14-aff5-6ce89d5156c6}" location="E:/Users/xxsho/Downloads/linuxmint-22.1-cinnamon-64bit.iso"/>
-        <Image uuid="{b13d1197-75d8-41bc-8049-e26c7177cda6}" location="C:/Program Files/Oracle/VirtualBox/VBoxGuestAdditions.iso"/>
         <Image uuid="{3849b988-1b23-4feb-919a-e33830cc0c3d}" location="H:/Users/xxsho/Downloads/linuxmint-22.1-cinnamon-64bit.iso"/>
       </DVDImages>
     </MediaRegistry>
     <ExtraData>
       <ExtraDataItem name="GUI/LastCloseAction" value="Shutdown"/>
-      <ExtraDataItem name="GUI/LastGuestSizeHint" value="958,1005"/>
-      <ExtraDataItem name="GUI/LastNormalWindowPosition" value="961,31,958,1048"/>
+      <ExtraDataItem name="GUI/LastGuestSizeHint" value="1239,1005"/>
+      <ExtraDataItem name="GUI/LastNormalWindowPosition" value="651,38,1239,1048"/>
     </ExtraData>
     <Hardware>
       <Memory RAMSize="6144"/>
@@ -45,37 +43,37 @@
             <InternalNetwork name="intnet"/>
             <NATNetwork name="NatNetwork"/>
           </DisabledModes>
-          <BridgedInterface name="Remote NDIS based Internet Sharing Device"/>
+          <BridgedInterface name="Qualcomm Atheros QCA9377 Wireless Network Adapter"/>
         </Adapter>
       </Network>
       <AudioAdapter codec="AD1980" useDefault="true" driver="WAS" enabled="true" enabledOut="true"/>
       <Clipboard mode="Bidirectional" fileTransfersEnabled="true"/>
       <DragAndDrop mode="Bidirectional"/>
       <GuestProperties>
-        <GuestProperty name="/VirtualBox/GuestAdd/GuiOnFocus" value="1" timestamp="1752662591171019200" flags="TRANSIENT, RDONLYGUEST"/>
-        <GuestProperty name="/VirtualBox/GuestAdd/HostVerLastChecked" value="7.1.6" timestamp="1752646178150521500" flags=""/>
-        <GuestProperty name="/VirtualBox/GuestAdd/Revision" value="167084" timestamp="1752646090238382500" flags=""/>
-        <GuestProperty name="/VirtualBox/GuestAdd/Version" value="7.1.6" timestamp="1752646090236868102" flags=""/>
-        <GuestProperty name="/VirtualBox/GuestAdd/VersionExt" value="7.1.6" timestamp="1752646090236868103" flags=""/>
-        <GuestProperty name="/VirtualBox/GuestInfo/Net/0/MAC" value="080027992939" timestamp="1752646266186529000" flags=""/>
-        <GuestProperty name="/VirtualBox/GuestInfo/Net/0/Name" value="enp0s3" timestamp="1752646266186529002" flags=""/>
-        <GuestProperty name="/VirtualBox/GuestInfo/Net/0/Status" value="Up" timestamp="1752646266186529001" flags=""/>
-        <GuestProperty name="/VirtualBox/GuestInfo/Net/0/V4/Broadcast" value="192.168.147.255" timestamp="1752651577371410501" flags=""/>
-        <GuestProperty name="/VirtualBox/GuestInfo/Net/0/V4/IP" value="192.168.147.42" timestamp="1752651577371410500" flags=""/>
-        <GuestProperty name="/VirtualBox/GuestInfo/Net/0/V4/Netmask" value="255.255.255.0" timestamp="1752646266185513501" flags=""/>
-        <GuestProperty name="/VirtualBox/GuestInfo/Net/Count" value="1" timestamp="1752662589795251100" flags=""/>
-        <GuestProperty name="/VirtualBox/GuestInfo/OS/LoggedInUsers" value="2" timestamp="1752661491904639100" flags="TRANSIENT, TRANSRESET"/>
-        <GuestProperty name="/VirtualBox/GuestInfo/OS/LoggedInUsersList" value="administrator,chall1" timestamp="1752661491902069700" flags="TRANSIENT, TRANSRESET"/>
-        <GuestProperty name="/VirtualBox/GuestInfo/OS/NoLoggedInUsers" value="false" timestamp="1752646095287853801" flags="TRANSIENT, TRANSRESET"/>
-        <GuestProperty name="/VirtualBox/GuestInfo/OS/Product" value="Linux" timestamp="1752646090234910300" flags=""/>
-        <GuestProperty name="/VirtualBox/GuestInfo/OS/Release" value="6.8.0-51-generic" timestamp="1752646090235886200" flags=""/>
-        <GuestProperty name="/VirtualBox/GuestInfo/OS/ServicePack" value="" timestamp="1752646090236868101" flags=""/>
-        <GuestProperty name="/VirtualBox/GuestInfo/OS/Version" value="#52-Ubuntu SMP PREEMPT_DYNAMIC Thu Dec  5 13:09:44 UTC 2024" timestamp="1752646090236868100" flags=""/>
-        <GuestProperty name="/VirtualBox/HostInfo/GUI/LanguageID" value="en_US" timestamp="1752662591537642600" flags="RDONLYGUEST"/>
-        <GuestProperty name="/VirtualBox/HostInfo/VBoxRev" value="167084" timestamp="1752646057441734902" flags="TRANSIENT, RDONLYGUEST"/>
-        <GuestProperty name="/VirtualBox/HostInfo/VBoxVer" value="7.1.6" timestamp="1752646057441734900" flags="TRANSIENT, RDONLYGUEST"/>
-        <GuestProperty name="/VirtualBox/HostInfo/VBoxVerExt" value="7.1.6" timestamp="1752646057441734901" flags="TRANSIENT, RDONLYGUEST"/>
-        <GuestProperty name="/VirtualBox/VMInfo/ResumeCounter" value="7" timestamp="1752661319323413200" flags="TRANSIENT, RDONLYGUEST"/>
+        <GuestProperty name="/VirtualBox/GuestAdd/GuiOnFocus" value="1" timestamp="1752737189777580700" flags="TRANSIENT, RDONLYGUEST"/>
+        <GuestProperty name="/VirtualBox/GuestAdd/HostVerLastChecked" value="7.1.6" timestamp="1752731623565937000" flags=""/>
+        <GuestProperty name="/VirtualBox/GuestAdd/Revision" value="167084" timestamp="1752731577393136303" flags=""/>
+        <GuestProperty name="/VirtualBox/GuestAdd/Version" value="7.1.6" timestamp="1752731577393136301" flags=""/>
+        <GuestProperty name="/VirtualBox/GuestAdd/VersionExt" value="7.1.6" timestamp="1752731577393136302" flags=""/>
+        <GuestProperty name="/VirtualBox/GuestInfo/Net/0/MAC" value="080027992939" timestamp="1752731938393512100" flags=""/>
+        <GuestProperty name="/VirtualBox/GuestInfo/Net/0/Name" value="enp0s3" timestamp="1752731938393512102" flags=""/>
+        <GuestProperty name="/VirtualBox/GuestInfo/Net/0/Status" value="Up" timestamp="1752731938393512101" flags=""/>
+        <GuestProperty name="/VirtualBox/GuestInfo/Net/0/V4/Broadcast" value="192.168.187.255" timestamp="1752731938391994101" flags=""/>
+        <GuestProperty name="/VirtualBox/GuestInfo/Net/0/V4/IP" value="192.168.187.42" timestamp="1752731938391994100" flags=""/>
+        <GuestProperty name="/VirtualBox/GuestInfo/Net/0/V4/Netmask" value="255.255.255.0" timestamp="1752731938391994102" flags=""/>
+        <GuestProperty name="/VirtualBox/GuestInfo/Net/Count" value="1" timestamp="1752737202671917800" flags=""/>
+        <GuestProperty name="/VirtualBox/GuestInfo/OS/LoggedInUsers" value="3" timestamp="1752736130907287400" flags="TRANSIENT, TRANSRESET"/>
+        <GuestProperty name="/VirtualBox/GuestInfo/OS/LoggedInUsersList" value="administrator,chall3,chall1" timestamp="1752736130906350000" flags="TRANSIENT, TRANSRESET"/>
+        <GuestProperty name="/VirtualBox/GuestInfo/OS/NoLoggedInUsers" value="false" timestamp="1752731582425068500" flags="TRANSIENT, TRANSRESET"/>
+        <GuestProperty name="/VirtualBox/GuestInfo/OS/Product" value="Linux" timestamp="1752731577391124100" flags=""/>
+        <GuestProperty name="/VirtualBox/GuestInfo/OS/Release" value="6.8.0-51-generic" timestamp="1752731577391124101" flags=""/>
+        <GuestProperty name="/VirtualBox/GuestInfo/OS/ServicePack" value="" timestamp="1752731577393136300" flags=""/>
+        <GuestProperty name="/VirtualBox/GuestInfo/OS/Version" value="#52-Ubuntu SMP PREEMPT_DYNAMIC Thu Dec  5 13:09:44 UTC 2024" timestamp="1752731577392144800" flags=""/>
+        <GuestProperty name="/VirtualBox/HostInfo/GUI/LanguageID" value="en_US" timestamp="1752737203615230200" flags="RDONLYGUEST"/>
+        <GuestProperty name="/VirtualBox/HostInfo/VBoxRev" value="167084" timestamp="1752731552364801502" flags="TRANSIENT, RDONLYGUEST"/>
+        <GuestProperty name="/VirtualBox/HostInfo/VBoxVer" value="7.1.6" timestamp="1752731552364801500" flags="TRANSIENT, RDONLYGUEST"/>
+        <GuestProperty name="/VirtualBox/HostInfo/VBoxVerExt" value="7.1.6" timestamp="1752731552364801501" flags="TRANSIENT, RDONLYGUEST"/>
+        <GuestProperty name="/VirtualBox/VMInfo/ResumeCounter" value="1" timestamp="1752731917925915700" flags="TRANSIENT, RDONLYGUEST"/>
       </GuestProperties>
       <StorageControllers>
         <StorageController name="IDE" type="PIIX4" PortCount="2" useHostIOCache="true" Bootable="true">
